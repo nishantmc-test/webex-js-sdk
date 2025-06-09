@@ -16,6 +16,7 @@ const saveElm = document.querySelector('#access-token-save');
 const registerBtn = document.querySelector('#register-btn');
 const deregisterBtn = document.querySelector('#deregister-btn');
 const authStatusElm = document.querySelector('#access-token-status');
+const encryptedFile = document.querySelector('#encryptedFile');
 const encryptedFileUrlInput = document.querySelector('#encrypted-file-url');
 const useFileServiceCheckbox = document.querySelector('#use-file-service');
 const encryptedFileJweInput = document.querySelector('#encrypted-file-jwe');
@@ -124,6 +125,47 @@ async function deregister(){
     console.error(`error deregistering webex: ${err}`);
     authStatusElm.innerText = 'Error deregistering Webex. Check access token!';
   });
+}
+
+async function createKROBindKey(){
+
+  let plaintext = 'This is a plain text';
+try {
+   let encryptedText = await webex.internal.encryption.kms
+      .createUnboundKeys({count: 1})
+      .then((keys) => {
+        if (keys && keys.length > 0 && keys[0]) {
+          reportRequest.encryptionKeyUrl = keys[0].uri;
+
+          return ctx.webex.internal.encryption.kms
+            .createResource({userIds: [keys[0].userId], keys})
+            .then(() => {
+              const promises = [];
+
+              if (plaintext) {
+                promises.push(
+                  ctx.webex.internal.encryption
+                    .encryptText(keys[0], plaintext)
+                    .then((encryptedName) => {
+                      encryptedFile.innerText = encryptedName
+                    })
+                );
+              }
+
+
+              return Promise.all(promises);
+            });
+        }
+
+        return Promise.resolve(true);
+      })
+      .catch((reason) => {
+        return Promise.reject(reason);
+      });
+  }
+  catch (error) {
+  } finally {
+  }
 }
 
 async function decryptFile() {
