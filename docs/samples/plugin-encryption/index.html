@@ -110,6 +110,26 @@
           </div>
         </section>
 
+        <!-- ############################## ############################## ############################## -->
+        <!-- Download KMS Key Section -->
+        <section id="downloadKmsKey">
+          <h2 class="collapsible">Download KMS Key, Decrypt and Download Audio File</h2>
+          <div class="section-content">
+            <fieldset>
+              <legend>Download KMS Key</legend>
+              <div class="u-mv">
+                <div>
+                  KMS Key URI: <input id="kms-key-uri" required value="" type="text" style="margin-bottom: 0.5rem;" placeholder="Enter KMS Key URI">
+                </div>
+                <button type="button" id="download-kms-key-btn" onclick="downloadKmsKey()" class="btn-code" style="display: block; margin-bottom: 0.5rem;">
+                  Download KMS Key
+                </button>
+                <pre id="kms-key-status">Status: Not attempted</pre>
+              </div>
+            </fieldset>
+          </div>
+        </section>
+
       </article>
     </div>
   </main>

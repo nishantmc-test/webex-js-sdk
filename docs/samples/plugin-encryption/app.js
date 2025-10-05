@@ -24,6 +24,9 @@ const decryptedFileNameInput = document.querySelector('#decrypted-file-name');
 const decryptFileBtn = document.querySelector('#decrypt-my-file-btn');
 const decryptFileResult = document.querySelector('#decrypt-file-result');
 const mimeTypeDropdown = document.querySelector('#mime-types');
+const kmsKeyUriInput = document.querySelector('#kms-key-uri');
+const downloadKmsKeyBtn = document.querySelector('#download-kms-key-btn');
+const kmsKeyStatus = document.querySelector('#kms-key-status');
 
 // Store and Grab `access-token` from localstorage
 if (localStorage.getItem('date') > new Date().getTime()) {
@@ -169,5 +172,38 @@ async function decryptFile() {
     if (objectUrl) {
       URL.revokeObjectURL(objectUrl);
     }
+  }
+}
+
+async function downloadKmsKey() {
+  const kmsKeyUri = kmsKeyUriInput.value;
+
+  if (!kmsKeyUri) {
+    kmsKeyStatus.innerText = 'Status: Error - KMS Key URI is required';
+    return;
+  }
+
+  if (!webex) {
+    kmsKeyStatus.innerText = 'Status: Error - Webex not initialized. Please initialize Webex first.';
+    return;
+  }
+
+  if (!tokenElm.value) {
+    kmsKeyStatus.innerText = 'Status: Error - Access token is required. Please authenticate first.';
+    return;
+  }
+
+  kmsKeyStatus.innerText = 'Status: Downloading KMS key...';
+  downloadKmsKeyBtn.disabled = true;
+
+  try {
+    const key = await webex.cypher.getKey(kmsKeyUri);
+    console.log('KMS Key downloaded successfully:', key);
+    kmsKeyStatus.innerText = `Status: Success - KMS key downloaded successfully!\n\nKey URI: ${key.uri || kmsKeyUri}\nKey ID: ${key.keyId || 'N/A'}\nKey Type: ${key.jwk?.kty || 'N/A'}`;
+  } catch (error) {
+    console.error('Error downloading KMS key:', error);
+    kmsKeyStatus.innerText = `Status: Failure - ${error.message || 'Failed to download KMS key'}`;
+  } finally {
+    downloadKmsKeyBtn.disabled = false;
   }
 }
