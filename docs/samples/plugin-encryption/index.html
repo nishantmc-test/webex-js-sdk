@@ -127,6 +127,33 @@
                 <pre id="kms-key-status">Status: Not attempted</pre>
               </div>
             </fieldset>
+
+            <fieldset>
+              <legend>Download Encrypted Content</legend>
+              <div class="u-mv">
+                <div>
+                  Content URL (JWE): <input id="encrypted-jwe-url" required value="" type="text" style="margin-bottom: 0.5rem;" placeholder="Enter JWE download link">
+                </div>
+                <button type="button" id="download-jwe-btn" onclick="downloadEncryptedJWE()" class="btn-code" style="display: block; margin-bottom: 0.5rem;">
+                  Download Content
+                </button>
+                <pre id="download-jwe-status">Status: Not attempted</pre>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Decrypt and Download Content</legend>
+              <div class="u-mv">
+                <p class="note">First download the KMS Key and Encrypted Content from the sections above.</p>
+                <button type="button" id="decrypt-content-btn" onclick="decryptContent()" class="btn-code" style="display: block; margin-bottom: 0.5rem;">
+                  Decrypt Content
+                </button>
+                <button type="button" id="save-decrypted-audio-btn" onclick="saveDecryptedAudio()" class="btn-code" style="display: none; margin-bottom: 0.5rem;">
+                  Download Decrypted Audio (WAV)
+                </button>
+                <pre id="decrypt-content-status">Status: Not attempted</pre>
+              </div>
+            </fieldset>
           </div>
         </section>
 
