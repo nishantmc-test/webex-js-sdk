@@ -10,6 +10,11 @@ let webex;
 let enableProd = true;
 let subscribedUserIds = [];
 
+// Global variables for storing downloaded data
+let downloadedKmsKey = null;
+let downloadedJwe = null;
+let decryptedAudioBuffer = null;
+
 const credentialsFormElm = document.querySelector('#credentials');
 const tokenElm = document.querySelector('#access-token');
 const saveElm = document.querySelector('#access-token-save');
@@ -24,6 +29,14 @@ const decryptedFileNameInput = document.querySelector('#decrypted-file-name');
 const decryptFileBtn = document.querySelector('#decrypt-my-file-btn');
 const decryptFileResult = document.querySelector('#decrypt-file-result');
 const mimeTypeDropdown = document.querySelector('#mime-types');
+
+// DOM elements for the new download sections
+const kmsKeyUriTextarea = document.querySelector('#kms-key-uri');
+const downloadKmsKeyBtn = document.querySelector('#download-kms-key-btn');
+const jweUrlTextarea = document.querySelector('#jwe-url');
+const downloadJweBtn = document.querySelector('#download-jwe-btn');
+const decryptJweBtn = document.querySelector('#decrypt-jwe-btn');
+const downloadAudioBtn = document.querySelector('#download-audio-btn');
 
 // Store and Grab `access-token` from localstorage
 if (localStorage.getItem('date') > new Date().getTime()) {
