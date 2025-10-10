@@ -37,6 +37,8 @@ const jweUrlTextarea = document.querySelector('#jwe-url');
 const downloadJweBtn = document.querySelector('#download-jwe-btn');
 const decryptJweBtn = document.querySelector('#decrypt-jwe-btn');
 const downloadAudioBtn = document.querySelector('#download-audio-btn');
+const playAudioBtn = document.querySelector('#play-audio-btn');
+const audioPlayer = document.querySelector('#audio-player');
 
 // Store and Grab `access-token` from localstorage
 if (localStorage.getItem('date') > new Date().getTime()) {
@@ -245,6 +247,126 @@ function copyJweToClipboard() {
   }).catch((err) => {
     addEncryptLog(`Failed to copy: ${err}`);
   });
+
+  // Handle audio playback
+  playAudioBtn.addEventListener('click', function() {
+    if (!decryptedAudioBuffer) {
+      return; // Button should be disabled, but just in case
+    }
+
+    try {
+      // Create a Blob from the audio buffer with proper MIME type
+      // Try multiple MIME types in case the browser is picky
+      let audioBlob;
+      
+      // First, check if the buffer already has WAV headers
+      const bufferView = new Uint8Array(decryptedAudioBuffer);
+      const hasWavHeader = bufferView[0] === 0x52 && bufferView[1] === 0x49 && 
+                          bufferView[2] === 0x46 && bufferView[3] === 0x46; // "RIFF"
+      
+      if (hasWavHeader) {
+        console.log('Audio buffer already has WAV headers');
+        audioBlob = new Blob([decryptedAudioBuffer], { type: 'audio/wav' });
+      } else {
+        console.log('Audio buffer missing WAV headers - trying as raw audio');
+        // Try different MIME types
+        audioBlob = new Blob([decryptedAudioBuffer], { type: 'audio/wav' });
+      }
+      
+      // Create object URL for the audio player
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      console.log('Audio blob created:', {
+        size: audioBlob.size,
+        type: audioBlob.type,
+        hasWavHeader: hasWavHeader,
+        bufferSize: decryptedAudioBuffer.byteLength
+      });
+      
+      // Set the audio source and show the player
+      audioPlayer.src = audioUrl;
+      audioPlayer.style.display = 'block';
+      audioPlayer.load(); // Explicitly load the audio
+      
+      // Play the audio
+      audioPlayer.play().then(() => {
+        console.log('Audio playback started successfully');
+      }).catch((error) => {
+        console.error('Error playing audio:', error);
+        console.error('Audio element state:', {
+          readyState: audioPlayer.readyState,
+          networkState: audioPlayer.networkState,
+          error: audioPlayer.error
+        });
+        
+        // Try alternative approach - use AudioContext
+        tryAudioContextPlayback(decryptedAudioBuffer);
+        
+        // Clean up the object URL on error
+        URL.revokeObjectURL(audioUrl);
+      });
+      
+      // Clean up object URL when audio ends
+      audioPlayer.addEventListener('ended', function cleanupEnded() {
+        URL.revokeObjectURL(audioUrl);
+        audioPlayer.removeEventListener('ended', cleanupEnded);
+      });
+      
+    } catch (error) {
+      console.error('Error setting up audio playback:', error);
+    }
+  });
+
+  // Alternative playback method using Web Audio API
+  function tryAudioContextPlayback(buffer) {
+    console.log('Trying AudioContext playback...');
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Try to decode the audio data
+      audioContext.decodeAudioData(buffer.slice(0), 
+        (decodedData) => {
+          console.log('Audio decoded successfully:', {
+            duration: decodedData.duration,
+            sampleRate: decodedData.sampleRate,
+            numberOfChannels: decodedData.numberOfChannels
+          });
+          
+          const source = audioContext.createBufferSource();
+          source.buffer = decodedData;
+          source.connect(audioContext.destination);
+          source.start(0);
+          console.log('AudioContext playback started');
+          
+          // Hide the HTML audio player and show a message
+          audioPlayer.style.display = 'none';
+          const playbackMsg = document.createElement('div');
+          playbackMsg.textContent = 'Playing audio via Web Audio API...';
+          playbackMsg.style.color = 'green';
+          playbackMsg.style.marginTop = '0.5rem';
+          playbackMsg.id = 'audiocontext-playback-msg';
+          
+          // Remove any existing message
+          const existingMsg = document.getElementById('audiocontext-playback-msg');
+          if (existingMsg) existingMsg.remove();
+          
+          playAudioBtn.parentNode.appendChild(playbackMsg);
+          
+          source.onended = () => {
+            console.log('AudioContext playback ended');
+            playbackMsg.textContent = 'Playback finished';
+          };
+        },
+        (error) => {
+          console.error('Error decoding audio data:', error);
+          alert('Unable to play audio. The file format may not be supported by your browser.');
+        }
+      );
+    } catch (error) {
+      console.error('Error with AudioContext:', error);
+      alert('Unable to play audio. Your browser may not support the Web Audio API.');
+    }
+  }
 }
 
 async function generateKeyAndKro() {
