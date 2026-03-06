@@ -275,6 +275,85 @@
           </div>
         </section>
 
+        <!-- ############################## ############################## ############################## -->
+        <!-- Decrypt JWE and Extract Audio File -->
+        <section id="decryptJweSection">
+          <h2 class="collapsible">Decrypt JWE and Extract Audio File</h2>
+          <div class="section-content">
+            <p class="note"><strong>Instructions:</strong> Enter the KMS Key URI and the JWE string to decrypt. 
+              The decrypted audio file can then be downloaded or played directly.</p>
+            
+            <!-- KMS Key URI Input -->
+            <fieldset>
+              <legend>Step 1: Enter KMS Key URI</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="decrypt-kms-key-uri">KMS Key URI:</label>
+                  <textarea id="decrypt-kms-key-uri" placeholder="Enter KMS key URI here (e.g., kms://kms-us.wbx2.com/keys/...)" rows="3" style="width: 100%; margin-bottom: 0.5rem;"></textarea>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- JWE Input -->
+            <fieldset>
+              <legend>Step 2: Enter JWE String</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="decrypt-jwe-input">JWE String:</label>
+                  <textarea id="decrypt-jwe-input" placeholder="Paste the JWE string here (e.g., eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0...)" rows="6" style="width: 100%; margin-bottom: 0.5rem; font-family: monospace; font-size: 0.85rem;"></textarea>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Decrypt Button -->
+            <fieldset>
+              <legend>Step 3: Decrypt JWE</legend>
+              <div class="u-mv">
+                <button type="button" id="decrypt-jwe-section-btn" class="btn-code" disabled>
+                  Decrypt JWE
+                </button>
+                <div id="decrypt-jwe-section-status" style="margin-top: 0.5rem;"></div>
+              </div>
+            </fieldset>
+
+            <!-- Audio Output -->
+            <fieldset id="decrypt-audio-output-fieldset" style="display: none;">
+              <legend>Decrypted Audio</legend>
+              <div class="u-mv">
+                <div id="decrypt-audio-info" style="margin-bottom: 0.5rem;">
+                  <strong>Audio size:</strong> <span id="decrypt-audio-size"></span>
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                  <button type="button" id="download-decrypted-audio-btn" class="btn-code">
+                    Download Extracted Audio File
+                  </button>
+                  <button type="button" id="play-decrypted-audio-btn" class="btn-code" style="margin-left: 0.5rem;">
+                    Play Audio
+                  </button>
+                  <button type="button" id="stop-decrypted-audio-btn" class="btn-code" style="margin-left: 0.5rem; display: none;">
+                    Stop Audio
+                  </button>
+                </div>
+                <audio id="decrypted-audio-player" controls style="width: 100%; margin-top: 0.5rem; display: none;">
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </fieldset>
+
+            <!-- Log Output -->
+            <fieldset>
+              <legend>Log</legend>
+              <div class="u-mv">
+                <pre id="decrypt-jwe-log" style="max-height: 200px; overflow-y: auto; background: #f5f5f5; padding: 0.5rem; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;"></pre>
+                <button type="button" id="clear-decrypt-jwe-log-btn" class="btn-code" style="margin-top: 0.5rem;">
+                  Clear Log
+                </button>
+              </div>
+            </fieldset>
+
+          </div>
+        </section>
+
       </article>
     </div>
   </main>
