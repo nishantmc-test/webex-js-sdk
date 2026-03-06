@@ -165,6 +165,81 @@
           </div>
         </section>
 
+        <!-- ############################## ############################## ############################## -->
+        <!-- Upload and Encrypt File -->
+        <section id="uploadEncryptFile">
+          <h2 class="collapsible">Upload and Encrypt File</h2>
+          <div class="section-content">
+            <p class="note"><strong>Instructions:</strong> First enter a valid KMS Key URI below, then upload a file to encrypt. 
+              The KMS Key URI can be obtained from CMF service or your KMS provider.</p>
+            
+            <!-- KMS Key URI Input -->
+            <fieldset>
+              <legend>Step 1: Enter KMS Key URI</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="encrypt-kms-key-uri">KMS Key URI:</label>
+                  <textarea id="encrypt-kms-key-uri" placeholder="Enter KMS key URI here (e.g., kms://kms-us.wbx2.com/keys/...)" rows="3" style="width: 100%; margin-bottom: 0.5rem;"></textarea>
+                </div>
+                <div id="encrypt-kms-key-status" style="margin-top: 0.5rem;"></div>
+              </div>
+            </fieldset>
+
+            <!-- File Upload -->
+            <fieldset id="encrypt-file-upload-fieldset" style="opacity: 0.5; pointer-events: none;">
+              <legend>Step 2: Upload File to Encrypt</legend>
+              <div class="u-mv">
+                <p class="note" id="encrypt-file-instruction" style="color: orange;">⚠️ Please enter a KMS Key URI above first.</p>
+                <div>
+                  <label for="encrypt-file-input">Select File:</label>
+                  <input type="file" id="encrypt-file-input" style="margin-bottom: 0.5rem;" disabled>
+                </div>
+                <div id="encrypt-file-info" style="margin-top: 0.5rem; display: none;">
+                  <strong>Selected file:</strong> <span id="encrypt-file-name"></span> (<span id="encrypt-file-size"></span>)
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Encrypt Button -->
+            <fieldset id="encrypt-action-fieldset" style="opacity: 0.5; pointer-events: none;">
+              <legend>Step 3: Encrypt File</legend>
+              <div class="u-mv">
+                <button type="button" id="encrypt-file-btn" class="btn-code" disabled>
+                  Encrypt File
+                </button>
+                <div id="encrypt-result-status" style="margin-top: 0.5rem;"></div>
+              </div>
+            </fieldset>
+
+            <!-- JWE Output -->
+            <fieldset id="encrypt-output-fieldset" style="display: none;">
+              <legend>Encrypted Output (JWE)</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="encrypt-jwe-output">JWE Output:</label>
+                  <textarea id="encrypt-jwe-output" rows="6" style="width: 100%; margin-bottom: 0.5rem; font-family: monospace; font-size: 0.85rem;" readonly></textarea>
+                </div>
+                <button type="button" id="copy-jwe-btn" class="btn-code">
+                  Copy JWE to Clipboard
+                </button>
+                <span id="copy-jwe-status" style="margin-left: 0.5rem;"></span>
+              </div>
+            </fieldset>
+
+            <!-- Log Output -->
+            <fieldset>
+              <legend>Log</legend>
+              <div class="u-mv">
+                <pre id="encrypt-log" style="max-height: 200px; overflow-y: auto; background: #f5f5f5; padding: 0.5rem; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;"></pre>
+                <button type="button" id="clear-encrypt-log-btn" class="btn-code" style="margin-top: 0.5rem;">
+                  Clear Log
+                </button>
+              </div>
+            </fieldset>
+
+          </div>
+        </section>
+
       </article>
     </div>
   </main>
