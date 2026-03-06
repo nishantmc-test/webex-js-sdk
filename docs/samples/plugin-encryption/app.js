@@ -122,6 +122,17 @@ async function register(){
     updateStatus(true);
     registerBtn.disabled = true;
     deregisterBtn.disabled = false;
+    
+    // Enable generate key button
+    const genKeyBtn = document.querySelector('#generate-key-btn');
+    const genKeyStatus = document.querySelector('#generate-key-status');
+    if (genKeyBtn) {
+      genKeyBtn.disabled = false;
+    }
+    if (genKeyStatus) {
+      genKeyStatus.textContent = '✓ Ready to generate key and KRO';
+      genKeyStatus.style.color = 'green';
+    }
   }).catch((err) => {
     console.error(`error registering webex: ${err}`);
     authStatusElm.innerText = 'Error registering Webex. Check access token!';
@@ -135,6 +146,17 @@ async function deregister(){
     updateStatus(false);
     registerBtn.disabled = false;
     deregisterBtn.disabled = true;
+    
+    // Disable generate key button
+    const genKeyBtn = document.querySelector('#generate-key-btn');
+    const genKeyStatus = document.querySelector('#generate-key-status');
+    if (genKeyBtn) {
+      genKeyBtn.disabled = true;
+    }
+    if (genKeyStatus) {
+      genKeyStatus.textContent = '⚠️ Please register Webex first';
+      genKeyStatus.style.color = 'orange';
+    }
   }).catch((err) => {
     console.error(`error deregistering webex: ${err}`);
     authStatusElm.innerText = 'Error deregistering Webex. Check access token!';

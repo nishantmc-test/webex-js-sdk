@@ -170,12 +170,47 @@
         <section id="uploadEncryptFile">
           <h2 class="collapsible">Upload and Encrypt File</h2>
           <div class="section-content">
-            <p class="note"><strong>Instructions:</strong> First enter a valid KMS Key URI below, then upload a file to encrypt. 
-              The KMS Key URI can be obtained from CMF service or your KMS provider.</p>
+            <p class="note"><strong>Instructions:</strong> You can either generate a new KMS key (Option A) or enter an existing KMS Key URI (Option B). 
+              Then upload a file to encrypt.</p>
             
-            <!-- KMS Key URI Input -->
+            <!-- Option A: Generate Key and KRO -->
+            <fieldset id="generate-key-fieldset">
+              <legend>Step 1 - Option A: Generate New Key & KRO (Optional)</legend>
+              <div class="u-mv">
+                <p class="note" style="margin-bottom: 0.5rem;">
+                  <strong>Note:</strong> This will create a new KMS key and KRO (Key Resource Object), 
+                  binding them together with your authenticated user as the authorized user.
+                </p>
+                <button type="button" id="generate-key-btn" class="btn-code" disabled>
+                  Generate Key & KRO
+                </button>
+                <div id="generate-key-status" style="margin-top: 0.5rem;"></div>
+                
+                <!-- Generated Key Info (hidden until key is generated) -->
+                <div id="generated-key-info" style="display: none; margin-top: 1rem; padding: 0.5rem; background: #e8f5e9; border-radius: 4px;">
+                  <div style="margin-bottom: 0.5rem;">
+                    <strong>Generated Key URI:</strong>
+                    <textarea id="generated-key-uri" rows="2" style="width: 100%; font-family: monospace; font-size: 0.85rem;" readonly></textarea>
+                  </div>
+                  <div style="margin-bottom: 0.5rem;">
+                    <strong>Generated KRO URI:</strong>
+                    <textarea id="generated-kro-uri" rows="2" style="width: 100%; font-family: monospace; font-size: 0.85rem;" readonly></textarea>
+                  </div>
+                  <button type="button" id="use-generated-key-btn" class="btn-code">
+                    Use This Key for Encryption
+                  </button>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Divider -->
+            <div style="text-align: center; margin: 1rem 0; color: #666;">
+              <span style="background: white; padding: 0 1rem;">— OR —</span>
+            </div>
+
+            <!-- Option B: Manual KMS Key URI Input -->
             <fieldset>
-              <legend>Step 1: Enter KMS Key URI</legend>
+              <legend>Step 1 - Option B: Enter Existing KMS Key URI</legend>
               <div class="u-mv">
                 <div>
                   <label for="encrypt-kms-key-uri">KMS Key URI:</label>
