@@ -429,10 +429,10 @@ async function updateKroAuthlist() {
   statusElm.textContent = 'Updating authlist...';
 
   try {
-    const resource = await webex.internal.encryption.kms.fetchObject(kroUri);
-    addAuthlistLog(`KRO fetched successfully.`);
-
-    await webex.internal.encryption.kms.addAuthorization(resource, [{id: userId}]);
+    await webex.internal.encryption.kms.addAuthorization({
+      kroUri,
+      userIds: [userId],
+    });
     addAuthlistLog(`✓ Authlist updated successfully. ID "${userId}" added to KRO.`);
 
     statusElm.textContent = `✓ Authlist updated successfully.`;
