@@ -391,6 +391,61 @@ function copyJweToClipboard() {
   }
 }
 
+// =====================================================
+// Update KRO Authlist Section
+// =====================================================
+
+function addAuthlistLog(message) {
+  const logElm = document.querySelector('#authlist-log');
+  const timestamp = new Date().toLocaleTimeString();
+  logElm.textContent += `[${timestamp}] ${message}\n`;
+  logElm.scrollTop = logElm.scrollHeight;
+}
+
+async function updateKroAuthlist() {
+  const kroUri = document.querySelector('#authlist-kro-uri').value.trim();
+  const userId = document.querySelector('#authlist-user-id').value.trim();
+  const statusElm = document.querySelector('#update-authlist-status');
+
+  statusElm.textContent = '';
+  statusElm.style.color = '';
+
+  if (!kroUri) {
+    statusElm.textContent = '⚠️ Please enter a KRO URI.';
+    statusElm.style.color = 'orange';
+    addAuthlistLog('ERROR: KRO URI is required.');
+    return;
+  }
+
+  if (!userId) {
+    statusElm.textContent = '⚠️ Please enter a User ID or Machine ID.';
+    statusElm.style.color = 'orange';
+    addAuthlistLog('ERROR: User ID / Machine ID is required.');
+    return;
+  }
+
+  addAuthlistLog(`Updating authlist for KRO: ${kroUri}`);
+  addAuthlistLog(`Adding ID: ${userId}`);
+  statusElm.textContent = 'Updating authlist...';
+
+  try {
+    const resource = await webex.internal.encryption.kms.fetchObject(kroUri);
+    addAuthlistLog(`KRO fetched successfully.`);
+
+    await webex.internal.encryption.kms.addAuthorization(resource, [{id: userId}]);
+    addAuthlistLog(`✓ Authlist updated successfully. ID "${userId}" added to KRO.`);
+
+    statusElm.textContent = `✓ Authlist updated successfully.`;
+    statusElm.style.color = 'green';
+  } catch (error) {
+    console.error('Error updating KRO authlist:', error);
+    const msg = error.message || String(error);
+    addAuthlistLog(`ERROR: ${msg}`);
+    statusElm.textContent = `✗ Error: ${msg}`;
+    statusElm.style.color = 'red';
+  }
+}
+
 async function generateKeyAndKro() {
   const resourceUriInput = document.querySelector('#new-kro-resource-uri');
   const statusElm = document.querySelector('#generate-key-status');

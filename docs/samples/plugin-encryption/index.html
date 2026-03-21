@@ -276,6 +276,60 @@
         </section>
 
         <!-- ############################## ############################## ############################## -->
+        <!-- Update KRO Authlist -->
+        <section id="updateKroAuthlist">
+          <h2 class="collapsible">Update KRO Authlist</h2>
+          <div class="section-content">
+            <p class="note"><strong>Instructions:</strong> Enter the KRO URI and the User ID / Machine ID to add to its authlist, then click the button to update.</p>
+
+            <!-- KRO URI Input -->
+            <fieldset>
+              <legend>Step 1: Enter KRO URI</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="authlist-kro-uri">KRO URI:</label>
+                  <textarea id="authlist-kro-uri" placeholder="Enter KRO URI here (e.g., kms://kms-us.wbx2.com/resources/...)" rows="3" style="width: 100%; margin-bottom: 0.5rem;"></textarea>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- User / Machine ID Input -->
+            <fieldset>
+              <legend>Step 2: Enter User ID / Machine ID</legend>
+              <div class="u-mv">
+                <div>
+                  <label for="authlist-user-id">User ID / Machine ID:</label>
+                  <input id="authlist-user-id" type="text" placeholder="Enter User ID or Machine ID (UUID)" style="width: 100%; margin-bottom: 0.5rem;">
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Update Button -->
+            <fieldset>
+              <legend>Step 3: Update Authlist</legend>
+              <div class="u-mv">
+                <button type="button" id="update-authlist-btn" class="btn-code" onclick="updateKroAuthlist()">
+                  Update Authlist
+                </button>
+                <div id="update-authlist-status" style="margin-top: 0.5rem;"></div>
+              </div>
+            </fieldset>
+
+            <!-- Log Output -->
+            <fieldset>
+              <legend>Log</legend>
+              <div class="u-mv">
+                <pre id="authlist-log" style="max-height: 200px; overflow-y: auto; background: #f5f5f5; padding: 0.5rem; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;"></pre>
+                <button type="button" class="btn-code" onclick="document.querySelector('#authlist-log').textContent = ''" style="margin-top: 0.5rem;">
+                  Clear Log
+                </button>
+              </div>
+            </fieldset>
+
+          </div>
+        </section>
+
+        <!-- ############################## ############################## ############################## -->
         <!-- Decrypt JWE and Extract Audio File -->
         <section id="decryptJweSection">
           <h2 class="collapsible">Decrypt JWE and Extract Audio File</h2>
